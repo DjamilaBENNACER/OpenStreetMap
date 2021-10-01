@@ -1,0 +1,3 @@
+*
+!target/pizzeria-vertx-jar-with-dependencies.jar
+!build/libs/pizzeria-vertx.jar

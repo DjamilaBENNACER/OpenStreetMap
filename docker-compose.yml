@@ -1,0 +1,77 @@
+version: '3'
+
+networks:
+  pizzeria:
+    driver: bridge
+
+services:
+  mysql-db:
+    image: mysql:8
+    ports:
+      - 127.0.0.1:3306:3306
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d/
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+    networks:
+      - pizzeria
+
+  pizzeria-servlet:
+    build: ./pizzeria/pizzeria-servlet
+    image: joxit/ig-master2:pizzeria-servlet
+    ports:
+      - 127.0.0.1:8080:8080
+    environment:
+      JAVA_OPTS: "-DdataSource.jdbcUrl=mysql://mysql-db:3306/pizzeria?useSSL=false\\&allowPublicKeyRetrieval=true"
+    networks:
+      - pizzeria
+    depends_on:
+      - mysql-db
+  pizzeria-vertx:
+    build: ./pizzeria/pizzeria-vertx
+    image: joxit/ig-master2:pizzeria-vertx
+    ports:
+      - 127.0.0.1:8081:8081
+    environment:
+      SERVER_PORT: 8081
+      JAVA_OPTS: "-DdataSource.jdbcUrl=mysql://mysql-db:3306/pizzeria?useSSL=false&allowPublicKeyRetrieval=true"
+    networks:
+      - pizzeria
+  pizzeria-boot:
+    build: ./pizzeria/pizzeria-boot
+    image: joxit/ig-master2:pizzeria-boot
+    ports:
+      - 127.0.0.1:8082:8082
+    environment:
+      SERVER_PORT: 8082
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-db:3306/pizzeria?useSSL=false&allowPublicKeyRetrieval=true"
+    networks:
+      - pizzeria
+  pizzeria-webflux:
+    build: ./pizzeria/pizzeria-webflux
+    image: joxit/ig-master2:pizzeria-webflux
+    ports:
+      - 127.0.0.1:8083:8083
+    environment:
+      SERVER_PORT: 8083
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-db:3306/pizzeria?useSSL=false&allowPublicKeyRetrieval=true"
+    networks:
+      - pizzeria
+  pizzeria-ui:
+    image: joxit/ig-master2:pizzeria-ui
+    ports:
+      - 80:80
+
+  osm-boot:
+    build: ./osm/osm-boot
+    image: joxit/ig-master2:osm-boot
+    ports:
+      - 127.0.0.1:8080:8080
+    environment:
+      SERVER_PORT: 8080
+
+  osm-ui:
+    build: ./osm/osm-ui
+    image: joxit/ig-master2:osm-ui
+    ports:
+      - 127.0.0.1:81:80

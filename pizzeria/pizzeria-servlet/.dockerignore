@@ -1,0 +1,3 @@
+*
+!target/pizzeria-servlet.war
+!build/libs/pizzeria-servlet.war

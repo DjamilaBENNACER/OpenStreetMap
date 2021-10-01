@@ -1,0 +1,7 @@
+FROM openjdk:11-jre-slim
+
+WORKDIR /usr/src/pizzeria
+
+COPY build/libs/pizzeria-boot.jar pizzeria-boot.jar
+
+CMD java $JAVA_OPTS -jar pizzeria-boot.jar

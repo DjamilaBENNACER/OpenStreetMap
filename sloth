@@ -1,0 +1,38 @@
+#!/bin/bash
+
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
+DIR=$(pwd)
+
+function run_for_java {
+  cd $1
+  ./gradlew clean :${1}-core:build :${1}-${2}:build
+  cd $DIR
+  docker-compose build ${1}-${2}
+  docker-compose up ${1}-${2}
+}
+
+function run_for_vertx {
+  cd $1
+  ./gradlew clean :${1}-core:build :${1}-${2}:shadowJar
+  cd $DIR
+  docker-compose build ${1}-${2}
+  docker-compose up ${1}-${2}
+}
+
+if [ "$1" = "pizzeria" ]; then
+  case "$2" in
+    boot|core|servlet|webflux)
+      run_for_java $1 $2
+      ;;
+    vertx)
+      run_for_vertx $1 $2
+      ;;
+    ui)
+      docker-compose build ${1}-${2}
+      docker-compose up ${1}-${2}
+      ;;
+    *)
+      echo Nothing to do for $1 $2
+      ;;
+  esac
+fi

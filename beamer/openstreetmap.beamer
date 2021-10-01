@@ -1,0 +1,232 @@
+---
+title: La cartographie avec OpenStreetMap
+subtitle: Institut Galilée - Master 2 PLS
+author: Jones Magloire
+date: 23 Septembre 2021
+theme: metropolis
+toc: true
+section-titles: false
+header-includes: |
+  \newcommand{\hideFromPandoc}[1]{#1}
+  \usepackage{fourier}
+  \hideFromPandoc{ \let\Begin\begin \let\End\end }
+  \metroset{block=fill}
+  \newcommand{\sectionimage}{Foo}
+  \newcommand{\imagedirectory}{openstreetmap-images}
+  \AtBeginEnvironment{block}{\setbeamercolor{itemize item}{fg=blueJawg}}
+  \AtBeginEnvironment{block}{\setbeamercolor{itemize subitem}{fg=blueJawg}}
+  \usepackage{dirtytalk}
+build: pandoc -f markdown -st beamer openstreetmap.beamer -o openstreetmap.pdf
+---
+
+# OSM
+
+---
+
+## OpenStreetMap
+
+> No one knows everything, everyone knows something, all knowledge resides in humanity...
+- Pierre Levy
+
+## Le projet OpenStreetMap
+
+\begin{block}{Le projet OpenStreetMap}
+  \begin{itemize}
+    \item Projet de cartographie mondial
+    \item Fondé en 2004 en Angleterre
+    \item Projet collaboratif
+    \item Fondation à but non lucratif
+    \item Chaque pays a sa communauté
+    \item Organisation de State Of The Map (conférences modiales)
+  \end{itemize}
+\end{block}
+
+## La donnée OSM
+
+\center\Large Projet de cartographie mondial
+
+![](openstreetmap-images/osm-world-project.png){ height=256px }
+
+## La donnée OSM
+
+\center\Large Types de données différents: Nodes, Way, Relations
+
+![](openstreetmap-images/overpass-turbo.png){ height=256px }
+
+## La donnée OSM
+
+\center\Large Tags clé/valeur
+
+![](openstreetmap-images/osm-keys-values.png){ height=300px }
+
+## La donnée OSM
+
+\center\large Parution hebdomadaire au format BZ2/PBF (100Go/60Go) avec mise à jour par minutes/heures/jours
+
+![](openstreetmap-images/planet-osm-org.png){ height=300px }
+
+## La donnée OSM
+
+\center\Large Open Database License (ODbL)
+
+- Possibilité d'utiliser la donnée publiquement et commercialement
+- Obligation de maintenir la license sur la donnée après ajout/modification
+- Obligation de mentionner à chauqe usage `© les contributeurs d’OpenStreetMap`
+
+## La carte OSM
+
+\center\Large Fond de carte par défaut: <https://osm.org>
+
+![](openstreetmap-images/osm-org.png){ height=300px }
+
+## La carte OSM
+
+\center\large Éditable via iD (osm.org), JOSM (desktop), OSM Contributors (Android), StreetComplete (Android)...
+
+![](openstreetmap-images/iD-osm-org.png){ height=300px }
+
+## La carte OSM
+
+\center\Large Un wiki dédié: <https://wiki.osm.org/>
+
+![](openstreetmap-images/wiki-osm-org.png){ height=300px }
+
+## Les providers OSM
+
+\begin{exampleblock}{Les providers OSM}
+  \begin{itemize}
+    \item \textbf{Jawg}Maps (France)
+    \item Mapbox (USA)
+    \item Carto (USA)
+    \item Geofabrik (Allemagne)
+    \item Stamen (USA)
+    \item Thunderforest (USA)
+    \item \textbf{map}tiler/OpenMapTiles (Suisse)
+  \end{itemize}
+\end{exampleblock}
+
+## Qui utilise des cartes OSM ?
+
+\begin{alertblock}{Qui utilise des cartes OSM ?}
+  \begin{itemize}
+    \item Facebook et Instagram
+    \item Snapshat (utilise Mapbox)
+    \item Wikipedia (via Wikimedia)
+    \item Microsoft (via Bing)
+  \end{itemize}
+\end{alertblock}
+
+# Qu'est-ce qu'une carte ?
+
+## Qu'est-ce qu'une carte ?
+
+### Composition
+- De la géometrie géocontextualisée
+- Points => Noms Villes/Pays, POIs (Point Of Interest), Numéros de rues, Arbres...
+- Lignes => Routes, Rivières, Frontières...
+- Polygones => Bâtiments, Fleuves/Lacs, Forêts, Frontières
+
+### Affichage
+- Rendu différent pour chaque type d'éléments
+- Utilisation de \say{tuiles} raster ou vectorielle
+
+## Qu'est-ce qu'une carte ?
+
+\includegraphics[width=\textwidth,keepaspectratio]{./openstreetmap-images/tiles-3d.png}
+
+## Les services cartographiques
+
+\center\Large Fond de carte (personalisé ou non, flux WMTS ou WMS)
+
+![](openstreetmap-images/jawg-maps-editor.png){ height=300px }
+
+## Les services cartographiques
+
+\center\Large Geocoding (Nom de ville <=> coordonnées)
+
+![](openstreetmap-images/jawg-maps-geocoding.png){ height=300px }
+
+## Les services cartographiques
+
+\center\Large Routing (Route de A à B)
+
+![](openstreetmap-images/jawg-maps-routing.png){ height=300px }
+
+## Les services cartographiques
+
+\center\large Élevation (Altitude d'un point ou d'une série de points)
+
+![](openstreetmap-images/jawg-maps-elevation.png){ height=300px }
+
+## Les services cartographiques
+
+\center\Large Système d'Information Géographique (SIG)
+
+![](openstreetmap-images/ods-sig.png){ height=300px }
+
+# Création d'un serveur de tuiles
+
+## Création d'un serveur de tuiles{.standout}
+
+\centering\Huge\href{https://joxit.dev/IG-Master2/osm/osm-ui/?access-token=RSFgHKD19KiOWw3PzK7dMKh0nEeb2IHXhc7OynVPLdnjeQTc6bFaQPIKu4oxe6Dq&url=https://osm.joxit.dev
+}{Démo}
+
+## Création d'un serveur de tuiles
+
+- Format de l'API: `/{z}/{x}/{y}.png`
+- Mode simplifié: SVG du monde => png
+- Base de code disponible => <https://github.com/Joxit/IG-Master2/tree/master/osm>
+- Zoom 0: $2^0 = 1$ tuile 256x256
+- Zoom 1: $2^2 = 4$ tuiles
+- Zoom 2: $2^4 = 16$ tuiles
+- Zoom n: $2^{2n}$ tuiles
+
+## Création d'un serveur de tuiles{.standout}
+
+\centering\Huge\href{https://joxit.dev/IG-Master2/osm\#le-serveur-de-tuiles}{Place au TP}
+
+# Création d'un serveur de POIs
+
+## Création d'un serveur de POIs
+
+- Doit renvoyer un GeoJSON correctement formé: <https://geojson.org/>
+- Éléments simples (`FeatureCollection` de `Points`)
+- Exemple de donnée disponible => <https://github.com/Joxit/IG-Master2/tree/master/osm/osm-core/src/main/resources/>
+- Renvoyer les données via votre API
+- Ajout des éléments sur la carte
+
+## Création d'un serveur de POIs{.standout}
+
+\centering\Huge\href{https://joxit.dev/IG-Master2/osm\#ajouter-des-points}{Place au TP}
+
+# Ajout de tuiles vectorielles
+
+## Ajout de tuiles vectorielles
+
+- Création d'un compte sur le lab: <https://jawg.io/lab/>
+- Remplacement du style
+
+## Ajout de tuiles vectorielles{.standout}
+
+\centering\Huge\href{https://joxit.dev/IG-Master2/osm\#ajout-dune-source-de-tuiles-vectorielles}{Place au TP}
+
+# Conclusion
+
+## Conclusion
+
+\begin{block}{Implémentations}
+  \begin{itemize}
+    \item Fond de carte
+    \item Service de POIs
+    \item UI pour le fond de carte
+    \item UI pour les POIs
+    \item UI pour l'itinéraire
+    %\item UI pour le géocoding
+  \end{itemize}
+\end{block}
+
+---
+
+## Conclusion {.standout}
+
+\centering\Huge Question ?
